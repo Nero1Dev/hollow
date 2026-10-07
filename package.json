@@ -4,22 +4,64 @@
   "description": "A dark TUI-style theme: framed windows with labels, gaps between panels, red border on hover and focus-follows-mouse.",
   "version": "1.0.0",
   "publisher": "nero1dev",
-  "author": { "name": "Nero1Dev" },
+  "author": {
+    "name": "Nero1Dev"
+  },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nero1Dev/hollow.git"
+  },
+  "homepage": "https://github.com/Nero1Dev/hollow#readme",
+  "bugs": {
+    "url": "https://github.com/Nero1Dev/hollow/issues"
+  },
   "icon": "icon.png",
-  "galleryBanner": { "color": "#0f0f0f", "theme": "dark" },
-  "engines": { "vscode": "^1.100.0" },
-  "categories": ["Themes", "Other"],
-  "keywords": ["theme", "dark", "tui", "terminal", "minimal", "monospace", "red", "layout", "custom ui"],
+  "galleryBanner": {
+    "color": "#0f0f0f",
+    "theme": "dark"
+  },
+  "engines": {
+    "vscode": "^1.100.0"
+  },
+  "categories": [
+    "Themes",
+    "Other"
+  ],
+  "keywords": [
+    "theme",
+    "dark",
+    "tui",
+    "terminal",
+    "minimal",
+    "monospace",
+    "red",
+    "layout",
+    "custom ui"
+  ],
   "main": "./extension.js",
-  "activationEvents": ["onStartupFinished"],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
   "contributes": {
     "themes": [
-      { "label": "hollow", "uiTheme": "vs-dark", "path": "./themes/hollow-color-theme.json" }
+      {
+        "label": "hollow",
+        "uiTheme": "vs-dark",
+        "path": "./themes/hollow-color-theme.json"
+      }
     ],
     "commands": [
-      { "command": "hollow.enableLayout", "title": "Enable layout", "category": "Hollow" },
-      { "command": "hollow.disableLayout", "title": "Disable layout", "category": "Hollow" }
+      {
+        "command": "hollow.enableLayout",
+        "title": "Enable layout",
+        "category": "Hollow"
+      },
+      {
+        "command": "hollow.disableLayout",
+        "title": "Disable layout",
+        "category": "Hollow"
+      }
     ]
   },
   "scripts": {
