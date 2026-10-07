@@ -1,0 +1,29 @@
+{
+  "name": "hollow",
+  "displayName": "hollow tui",
+  "description": "A dark TUI-style theme: framed windows with labels, gaps between panels, red border on hover and focus-follows-mouse.",
+  "version": "1.0.0",
+  "publisher": "nairon",
+  "author": { "name": "Nairon" },
+  "license": "MIT",
+  "icon": "icon.png",
+  "galleryBanner": { "color": "#0f0f0f", "theme": "dark" },
+  "engines": { "vscode": "^1.100.0" },
+  "categories": ["Themes", "Other"],
+  "keywords": ["theme", "dark", "tui", "terminal", "minimal", "monospace", "red", "layout", "custom ui"],
+  "main": "./extension.js",
+  "activationEvents": ["onStartupFinished"],
+  "contributes": {
+    "themes": [
+      { "label": "hollow", "uiTheme": "vs-dark", "path": "./themes/hollow-color-theme.json" }
+    ],
+    "commands": [
+      { "command": "hollow.enableLayout", "title": "Enable layout", "category": "Hollow" },
+      { "command": "hollow.disableLayout", "title": "Disable layout", "category": "Hollow" }
+    ]
+  },
+  "scripts": {
+    "build": "node gen.js",
+    "package": "node gen.js && vsce package"
+  }
+}

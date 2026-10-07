@@ -1,0 +1,253 @@
+/* hollow: layout estilo TUI pro VS Code (carregado pelo Custom UI Style)
+ * usa os cartões flutuantes nativos do VS Code (workbench.experimental.modernUI).
+ * cada painel (e cada grupo de editor) vira uma "janela" com borda, rótulo e espaço em volta. */
+
+.monaco-workbench {
+    --hollow-shell: #0f0f0f; /* fundo entre as janelas */
+    --hollow-bg: #121212; /* fundo das janelas */
+    --hollow-border: #3a3a3a; /* borda normal */
+    --hollow-border-hover: #a8352b; /* borda da janela com o mouse em cima (vermelho, igual ao discord) */
+    --hollow-border-focus: #a8352b; /* borda da janela onde você está digitando */
+    --hollow-label: #8a8a8a; /* cor dos rótulos */
+    --hollow-label-focus: #dd766a; /* cor do rótulo da janela com o mouse em cima */
+    --hollow-accent: #a8352b; /* vermelho das abas e listas */
+    --hollow-transition: 0.2s ease;
+    --hollow-inset: 3px; /* quanto a borda entra na janela (aumenta o espaço entre elas) */
+    --hollow-thickness: 2px; /* espessura da borda */
+    --hollow-edge: calc(var(--hollow-inset) + var(--hollow-thickness) + 1px); /* área coberta pela moldura */
+
+    --modern-ui-shell-background: var(--hollow-shell);
+    font-weight: 300;
+    letter-spacing: -0.05ch;
+}
+
+/* sem cantos arredondados em lugar nenhum */
+.monaco-workbench,
+.monaco-workbench *,
+.monaco-workbench *::before,
+.monaco-workbench *::after {
+    border-radius: 0 !important;
+    --vscode-cornerRadius-large: 0px;
+    --vscode-cornerRadius-medium: 0px;
+    --vscode-cornerRadius-small: 0px;
+    --modern-ui-window-corner-radius: 0px;
+}
+
+/* barra de título e barra de status no mesmo fundo do espaço entre janelas */
+.monaco-workbench .part.titlebar,
+.monaco-workbench .part.statusbar {
+    background: var(--hollow-shell) !important;
+    border-color: transparent !important;
+}
+
+/* ---------- limpa as bordas e linhas nativas ---------- */
+
+body .monaco-workbench.floating-panels :is(.part.activitybar, .part.sidebar, .part.editor, .part.panel, .part.auxiliarybar) {
+    --modern-ui-floating-card-border-color: transparent;
+    --modern-ui-editor-border-color: transparent;
+    --vscode-editorGroup-border: transparent;
+    --vscode-panel-border: transparent;
+    --vscode-sideBarSectionHeader-border: transparent;
+    --vscode-editorGroupHeader-tabsBorder: transparent;
+    --vscode-tab-border: transparent;
+    border-color: transparent !important;
+    box-shadow: none !important;
+    background-color: var(--hollow-shell) !important;
+    position: relative;
+}
+
+body .monaco-workbench.floating-panels .part.editor::before,
+body .monaco-workbench.floating-panels .part.editor::after {
+    display: none !important;
+}
+
+.monaco-workbench .part.editor .monaco-split-view2 > .split-view-container > .split-view-view::before,
+.monaco-workbench .part.panel .composite.title {
+    background-color: transparent !important;
+    border-color: transparent !important;
+}
+
+/* ---------- as janelas ---------- */
+
+body .monaco-workbench.floating-panels :is(.part.activitybar, .part.sidebar, .part.panel, .part.auxiliarybar),
+body .monaco-workbench.floating-panels .part.editor .editor-group-container {
+    --hollow-c: var(--hollow-border);
+    --hollow-l: var(--hollow-label);
+    background-color: var(--hollow-bg) !important;
+}
+
+body .monaco-workbench.floating-panels .part.editor .editor-group-container {
+    position: relative;
+}
+
+/* a moldura: espaço em volta (pintado com o fundo) + borda */
+body .monaco-workbench.floating-panels :is(.part.activitybar, .part.sidebar, .part.panel, .part.auxiliarybar)::after,
+body .monaco-workbench.floating-panels .part.editor .editor-group-container::after {
+    content: '' !important;
+    display: block !important;
+    position: absolute !important;
+    inset: var(--hollow-inset) !important;
+    border: var(--hollow-thickness) solid var(--hollow-c) !important;
+    box-shadow: 0 0 0 calc(var(--hollow-inset) + 1px) var(--hollow-shell) !important;
+    background: none !important;
+    pointer-events: none !important;
+    z-index: 30 !important;
+    opacity: 1 !important;
+    transition: border-color var(--hollow-transition);
+}
+
+body .monaco-workbench.floating-panels :is(.part.activitybar, .part.sidebar, .part.panel, .part.auxiliarybar):hover,
+body .monaco-workbench.floating-panels .part.editor .editor-group-container:hover,
+body .monaco-workbench.floating-panels :is(.part.sidebar, .part.panel, .part.auxiliarybar, .part.editor .editor-group-container).hollow-hover {
+    --hollow-c: var(--hollow-border-hover) !important;
+    --hollow-l: var(--hollow-label-focus) !important;
+}
+
+/* janela ativa: borda vermelha.
+ * o grupo de editor ativo fica vermelho quando o foco não está em outro painel
+ * (assim funciona até no chat do Claude, que é um webview fora da árvore do painel) */
+body .monaco-workbench.floating-panels :is(.part.activitybar, .part.sidebar, .part.panel, .part.auxiliarybar):is(:focus-within, :has(:focus)),
+body .monaco-workbench.floating-panels:not(:has(:is(.part.activitybar, .part.sidebar, .part.panel, .part.auxiliarybar):focus-within)) .part.editor .editor-group-container.active {
+    --hollow-c: var(--hollow-border-focus);
+}
+
+/* webviews (chat, preview) ficam por cima; recorta pra não cobrir a borda */
+.monaco-workbench.floating-panels .webview-overlay-content:not(.webview-overlay-modal) {
+    clip-path: inset(0 calc(var(--hollow-edge) + 1px) calc(var(--hollow-edge) + 1px) calc(var(--hollow-edge) + 1px));
+}
+
+/* ---------- rótulos em cima da borda ---------- */
+
+body .monaco-workbench.floating-panels :is(.part.activitybar, .part.panel)::before,
+body .monaco-workbench.floating-panels .part.editor .editor-group-container::before,
+body .monaco-workbench.floating-panels :is(.part.sidebar, .part.auxiliarybar) > .title > .title-label {
+    position: absolute !important;
+    top: calc(var(--hollow-inset) + var(--hollow-thickness) / 2);
+    left: calc(var(--hollow-inset) + 8px);
+    transform: translateY(-50%);
+    padding: 0 4px !important;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1 !important;
+    letter-spacing: 0;
+    color: var(--hollow-l);
+    background: var(--hollow-shell);
+    pointer-events: none;
+    z-index: 32;
+    transition: color var(--hollow-transition);
+}
+
+body .monaco-workbench.floating-panels .part.activitybar::before { content: 'nav'; left: calc(var(--hollow-inset) + 4px); }
+body .monaco-workbench.floating-panels .part.panel::before { content: 'panel'; }
+body .monaco-workbench.floating-panels .part.editor .editor-group-container::before { content: 'editor'; }
+
+/* sidebar e chat: o título do próprio VS Code (explorador, pesquisar...) vira o rótulo */
+body .monaco-workbench.floating-panels :is(.part.sidebar, .part.auxiliarybar) > .title > .title-label {
+    pointer-events: auto;
+    max-width: calc(100% - 50px);
+}
+
+body .monaco-workbench.floating-panels :is(.part.sidebar, .part.auxiliarybar) > .title > .title-label h2 {
+    font-size: 11px !important;
+    font-weight: 500 !important;
+    line-height: 1 !important;
+    color: var(--hollow-l) !important;
+    transition: color var(--hollow-transition);
+}
+
+/* ---------- respiro entre a borda e o conteúdo ---------- */
+
+.monaco-workbench.floating-panels :is(.part.sidebar, .part.panel, .part.auxiliarybar) > .title {
+    padding-left: calc(var(--hollow-edge) + 8px) !important;
+    padding-right: calc(var(--hollow-edge) + 6px) !important;
+}
+
+/* abas do editor um pouco pra baixo e pra dentro */
+.monaco-workbench.floating-panels .part.editor .editor-group-container > .title {
+    padding-top: calc(var(--hollow-inset) - 2px);
+    padding-left: calc(var(--hollow-inset) + 4px);
+    padding-right: calc(var(--hollow-inset) + 4px);
+}
+
+/* itens das listas (explorador, busca, git...) afastados da borda */
+.monaco-workbench.floating-panels :is(.part.sidebar, .part.auxiliarybar, .part.panel) .pane-header {
+    padding-left: calc(var(--hollow-edge) + 4px) !important;
+}
+
+.monaco-workbench.floating-panels :is(.part.sidebar, .part.auxiliarybar, .part.panel) .monaco-tl-row {
+    padding-left: var(--hollow-edge);
+}
+
+.monaco-workbench.floating-panels .part.activitybar > .content {
+    box-sizing: border-box !important;
+    height: 100% !important;
+    padding-top: calc(var(--hollow-inset) + 8px);
+    padding-bottom: calc(var(--hollow-edge) + 4px);
+}
+
+.monaco-workbench.floating-panels .part.panel .terminal-wrapper {
+    padding-left: calc(var(--hollow-edge) + 4px) !important;
+}
+
+/* barras de rolagem puxadas pra dentro, pra não sumirem embaixo da moldura */
+.monaco-workbench.floating-panels :is(.part.sidebar, .part.panel, .part.auxiliarybar, .part.editor) .monaco-scrollable-element > .scrollbar.vertical {
+    transform: translateX(calc(-1 * var(--hollow-edge)));
+}
+
+.monaco-workbench.floating-panels :is(.part.sidebar, .part.panel, .part.auxiliarybar, .part.editor) .monaco-scrollable-element > .scrollbar.horizontal {
+    transform: translateY(calc(-1 * var(--hollow-edge)));
+}
+
+/* ---------- detalhes ---------- */
+
+/* cabeçalhos em minúsculo, estilo terminal */
+.monaco-workbench .pane-header .title,
+.monaco-workbench .part > .title > .title-label h2,
+.monaco-workbench .composite-bar .action-label {
+    text-transform: lowercase !important;
+    letter-spacing: 0 !important;
+}
+
+/* abas: sem divisórias, ativa com traço vermelho embaixo */
+.monaco-workbench .part.editor .tabs-container > .tab {
+    border-right-color: transparent !important;
+}
+
+.monaco-workbench .part.editor .editor-group-container.active .tabs-container > .tab.active {
+    box-shadow: inset 0 -2px 0 var(--hollow-accent) !important;
+}
+
+/* item selecionado nas listas com marcador à esquerda */
+.monaco-workbench .monaco-list:focus .monaco-list-row.focused.selected {
+    box-shadow: inset 2px 0 0 var(--hollow-accent);
+}
+
+.monaco-workbench .badge-content,
+.monaco-workbench .activity-action-badge {
+    font-weight: 500 !important;
+}
+
+/* barras de rolagem finas */
+.monaco-workbench .monaco-scrollable-element > .scrollbar.vertical > .slider {
+    width: 6px !important;
+    left: 4px !important;
+}
+
+.monaco-workbench .monaco-scrollable-element > .scrollbar.horizontal > .slider {
+    height: 6px !important;
+    top: 4px !important;
+}
+
+/* menus e caixas flutuantes com borda reta e sem sombra */
+.monaco-workbench .monaco-menu-container,
+.monaco-workbench .quick-input-widget,
+.monaco-workbench .monaco-hover,
+.monaco-workbench .suggest-widget,
+.monaco-workbench .notification-toast {
+    box-shadow: none !important;
+    border: 2px solid var(--hollow-border) !important;
+}
+
+.monaco-workbench .quick-input-widget {
+    border-color: var(--hollow-accent) !important;
+}

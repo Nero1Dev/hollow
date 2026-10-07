@@ -1,0 +1,5 @@
+gen.js
+*.vsix
+.gitignore
+.git/**
+images/**
