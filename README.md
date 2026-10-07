@@ -29,7 +29,7 @@ Run **Hollow: Disable layout**. This removes the injected styles and restores VS
 
 ## Customization
 
-The layout lives in two files inside VS Code's storage folder for this extension (`globalStorage/nairon.hollow`): `hollow.css` and `hollow-focus.js`. The variables at the top of `hollow.css` control colors, border thickness and gap size. After editing, run **Custom UI Style: Reload**.
+The layout lives in two files inside VS Code's storage folder for this extension (`globalStorage/nero1dev.hollow`): `hollow.css` and `hollow-focus.js`. The variables at the top of `hollow.css` control colors, border thickness and gap size. After editing, run **Custom UI Style: Reload**.
 
 Note: updating the extension overwrites these files.
 
