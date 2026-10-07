@@ -2,6 +2,8 @@
 
 A dark, TUI-style theme for VS Code: every panel becomes a framed window with a label on its border, separated by small gaps, with a red border on the window under the mouse.
 
+![hollow tui](images/screenshot.png)
+
 ## Features
 
 - **Color theme**: neutral grays with a deep red accent, square corners everywhere
